@@ -41,6 +41,7 @@ export const authProvider: AuthProvider = {
             if(res.ok) {
                 const resJson = await res.json()
                 setApiToken(resJson.data.attributes.token)
+                setApiUrl(`${domain}`)
                 return {success: true, redirectTo: "/"}
             }
         }
