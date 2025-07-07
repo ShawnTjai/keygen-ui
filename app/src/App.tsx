@@ -68,18 +68,6 @@ const App: React.FC = () => {
   const darkMode = useAppStateStore(state => state.darkMode) as ColorScheme
   const toggleDarkMode = useAppStateStore(state => state.toggleDarkMode)
 
-  const enableTracking = import.meta.env.PROD;
-  useEffect(() => {
-    const script = document.createElement("script");
-    if(enableTracking) {
-      script.src = "https://track.sandcatdev.com/sandcat";
-      script.defer = true;
-      script.setAttribute("data-website-id","e0abaca8-6206-46d8-986f-a1b6078bc1ef")
-    }
-    document.head.appendChild(script);
-    return () => { document.head.removeChild(script) };
-  }, [enableTracking]);
-
   return (
     <BrowserRouter>
       <MantineProvider
