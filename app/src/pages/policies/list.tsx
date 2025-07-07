@@ -369,6 +369,18 @@ export const PolicyList: React.FC = () => {
     },
   } = useTable({
     columns,
+    refineCoreProps: {
+      meta: {
+        getTotalPages: (response: {
+          links?: {
+            meta?: {
+              pages?: number;
+              count?: number;
+            }
+          }
+        }) => response?.links?.meta?.pages ?? 1,
+      },
+    },
   });
   const productIds = tableData?.data?.map((item) => item.relationships.product.data.id) ?? [];
   const {data: productsData} = useMany<IProduct>({
@@ -451,7 +463,7 @@ export const PolicyList: React.FC = () => {
         <br/>
         <Pagination
           position="right"
-          total={pageCount}
+          total={pageCount || (tableData?.links?.meta?.pages ?? 1)}
           page={current}
           onChange={setCurrent}
         />

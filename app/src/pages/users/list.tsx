@@ -84,6 +84,18 @@ export const UserList: React.FC = () => {
         },
     } = useTable({
         columns,
+        refineCoreProps: {
+            meta: {
+                getTotalPages: (response: {
+                    links?: {
+                        meta?: {
+                            pages?: number;
+                            count?: number;
+                        }
+                    }
+                }) => response?.links?.meta?.pages ?? 1,
+            },
+        },
     });
 
     setOptions((prev) => ({
@@ -154,7 +166,7 @@ export const UserList: React.FC = () => {
                 <br/>
                 <Pagination
                     position="right"
-                    total={pageCount}
+                    total={pageCount || (tableData?.links?.meta?.pages ?? 1)}
                     page={current}
                     onChange={setCurrent}
                 />

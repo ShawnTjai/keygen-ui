@@ -102,6 +102,18 @@ export const TokenList: React.FC = () => {
     },
   } = useTable({
     columns,
+    refineCoreProps: {
+      meta: {
+        getTotalPages: (response: {
+          links?: {
+            meta?: {
+              pages?: number;
+              count?: number;
+            }
+          }
+        }) => response?.links?.meta?.pages ?? 1,
+      },
+    },
   });
 
   const productIds = tableData?.data?.map((item) => item.relationships.bearer.data.type == "products" ? item.relationships.bearer.data.id : "") ?? [];
@@ -183,7 +195,7 @@ export const TokenList: React.FC = () => {
         <br/>
         <Pagination
           position="right"
-          total={pageCount}
+          total={pageCount || (tableData?.links?.meta?.pages ?? 1)}
           page={current}
           onChange={setCurrent}
         />

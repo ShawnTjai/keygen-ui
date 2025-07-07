@@ -40,16 +40,16 @@ export const ProductList: React.FC = () => {
                     );
                 },
             },
-            // {
-            //     id: "id",
-            //     header: "ID",
-            //     accessorKey: "id",
-            // },
-            // {
-            //     id: "type",
-            //     header: "Type",
-            //     accessorKey: "type",
-            // },
+            {
+                id: "id",
+                header: "ID",
+                accessorKey: "id",
+            },
+            {
+                id: "type",
+                header: "Type",
+                accessorKey: "type",
+            },
             {
                 id: "name",
                 header: "Name",
@@ -60,11 +60,11 @@ export const ProductList: React.FC = () => {
                 header: "DistributionStrategy",
                 accessorKey: "attributes.distributionStrategy"
             },
-            {
-                id: "url",
-                header: "Url",
-                accessorKey: "attributes.url"
-            },
+            // {
+            //     id: "url",
+            //     header: "Url",
+            //     accessorKey: "attributes.url"
+            // },
             {
                 "id": "created",
                 "header": "Created",
@@ -150,7 +150,20 @@ export const ProductList: React.FC = () => {
         },
     } = useTable({
         columns,
+        refineCoreProps: {
+            meta: {
+                getTotalPages: (response: {
+                    links?: {
+                        meta?: {
+                            pages?: number;
+                            count?: number;
+                        }
+                    }
+                }) => response?.links?.meta?.pages ?? 1,
+            },
+        },
     });
+
     // const categoryIds = tableData?.data?.map((item) => item.category.id) ?? [];
     // const { data: categoriesData } = useMany<ICategory>({
     //   resource: "categories",
@@ -229,7 +242,7 @@ export const ProductList: React.FC = () => {
                 <br/>
                 <Pagination
                     position="right"
-                    total={pageCount}
+                    total={pageCount || (tableData?.links?.meta?.pages ?? 1)}
                     page={current}
                     onChange={setCurrent}
                 />
